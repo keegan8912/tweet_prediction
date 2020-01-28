@@ -1,12 +1,15 @@
 import tweepy
+from StreamListener import MyStreamListener
 
 # Authenticate to Twitter
-auth = tweepy.OAuthHandler("mm2XCU9YPq3FJC1pxoxS1GXtI",
-    "PEJ02bzJOWh4Zb2jBSD5trPLRWAByDca95ffzHnyF1XPmanH5E")
-auth.set_access_token("813020461-qZjLAsZffRfhc9B8HIE4AJ3YvJQnwwRIPEArKs2N",
-    "Pdac54HObxtfn6MrGIYck1dLtUwI4P8rJ239LeLcz8Mj8")
+auth = tweepy.OAuthHandler("SUdZqYq6bB0VignOg63Ze5QnK",
+    "bOQXiQ3uL8t6qO2gbsWBVAxBZt4Z4eFTcZFrmhwvuLGPCQrHJI")
+auth.set_access_token("1222244833441603584-PgG6AZ7nZZxdSaWBIBuRwQUlcSnlnI",
+    "wBab28Ek35JbzC0k9wnxmsW3XQWjoRFg3LFvizy9GXcAd")
 
-api = tweepy.API(auth)
+# Create API object
+api = tweepy.API(auth, wait_on_rate_limit=True,
+                 wait_on_rate_limit_notify=True)
 
 try:
     api.verify_credentials()
@@ -14,4 +17,6 @@ try:
 except:
     print("Error during authentication")
 
-api.update_status("Hello World!")
+tweets_listener = MyStreamListener(api)
+stream = tweepy.Stream(api.auth, tweets_listener)
+stream.filter(track=["sarcastic_trump"], languages=["en"])
