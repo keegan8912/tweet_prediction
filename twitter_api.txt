@@ -1,4 +1,4 @@
-API key: SUdZqYq6bB0VignOg63Ze5QnK
-API secret key: bOQXiQ3uL8t6qO2gbsWBVAxBZt4Z4eFTcZFrmhwvuLGPCQrHJI
-Access token: 1222244833441603584-PgG6AZ7nZZxdSaWBIBuRwQUlcSnlnI
-Access token secret: wBab28Ek35JbzC0k9wnxmsW3XQWjoRFg3LFvizy9GXcAd
+API key: #
+API secret key: #
+Access token: #-#
+Access token secret: #
