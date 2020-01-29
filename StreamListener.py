@@ -20,7 +20,7 @@ class MyStreamListener(tweepy.StreamListener):
 
     def on_status(self, tweet):
         print("Received status.")
-        if self.is_mentioned(tweet):
+        if self.is_mentioned(tweet):            
             username = tweet.user.screen_name
             text = str(tweet.text)
             # do I need to remove @sarcastic_trump before generating a new prediction?

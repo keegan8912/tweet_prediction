@@ -1,7 +1,7 @@
 import tweepy
 import markovify
 import schedule
-
+import time
 
 class StandaloneTweeter:
 
@@ -16,7 +16,7 @@ class StandaloneTweeter:
         self.api.update_status(f"{standalone_tweet}")
 
     def run_every(self, minutes):
-        schedule.every(minutes).minute.do(self.tweet)
+        schedule.every(minutes).minutes.do(self.tweet)
         while True:
             schedule.run_pending()
             time.sleep(1)
