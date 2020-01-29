@@ -49,7 +49,7 @@ class MyStreamListener(tweepy.StreamListener):
         return False
 
     @staticmethod
-    def remove_extra_lines(self, text):
+    def remove_extra_lines(text):
         list_of_suffix = [".", ",", "!", "?"]
         idx = []
         for suffix in list_of_suffix:
