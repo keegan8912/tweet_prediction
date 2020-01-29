@@ -4,7 +4,7 @@
 This is the repository for a custom tweet predictor hackathon, starting with the prediction of Donald J. 
 Trump tweets.
 
-The bot account created on Twitter (@sarcastic_trump) generates random tweets using a Markov chain generator. It also completes the sentences when tweets are directed towards it using the GPT-2 model.
+The bot account created on Twitter (@sarcastic_trump) generates random tweets every few minutes using a Markov chain generator. It also completes the sentences when tweets are directed towards it using the GPT-2 model.
 
 
 ## Resources:
