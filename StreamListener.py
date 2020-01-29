@@ -14,7 +14,8 @@ class MyStreamListener(tweepy.StreamListener):
     #     self.api = api
     #     self.me = api.me()
 
-    def __init__(self):
+    def __init__(self, api: tweepy.API):
+        self.api = api
         with open('data/clean_tweets.txt') as f:
             text = f.read()
         self.text_model = markovify.Text(text)
@@ -23,7 +24,8 @@ class MyStreamListener(tweepy.StreamListener):
         gpt2.load_gpt2(self.sess, run_name='trump_clean_small')
 
     def generate_gpt2_tweet_using_prefix(self, prefix = 'Your mum', run_name = 'trump_clean_small'):
-        return gpt2.generate(sess, length=40, temperature=0.8, nsamples=1, run_name = run_name, prefix = prefix
+        return gpt2.generate(self.sess, length=40, temperature=0.8, nsamples=1, run_name = run_name, prefix = prefix,
+                             return_as_list = True
                             )
 
     def generate_tweets_from_markov_models(self, markov_text_model):
@@ -50,12 +52,22 @@ class MyStreamListener(tweepy.StreamListener):
         print("Received status.")
         if self.is_mentioned(tweet):
             username = tweet.user.screen_name
-            text = tweet.text
-            generated_tweet_from_text_as_prefix =  self.generate_gpt2_tweet_using_prefix(prefix = text)
-            tweet_without_extra_lines = self.remove_extra_lines(generated_tweet_from_text_as_prefix)
+            text = str(tweet.text)
+            ### do I need to remove @sarcastic_trump before generating a new prediction?
+            text_without_self_username = text.replace("@sarcastic_trump", "")
+
+            generated_tweet_from_text_as_prefix = self.generate_gpt2_tweet_using_prefix(prefix = text_without_self_username)
+            #remove the extra lines without punctuation. Might also remove hastags # ?
+            tweet_without_extra_lines = self.remove_extra_lines(generated_tweet_from_text_as_prefix[0])
+            
             print(f"{username}: {text}")
-            #self.api.update_status(f"Hey @{username}, what's up?", in_reply_to_status_id=tweet.id)
-            self.api.update_status(f"Hey @{username}, {tweet_without_extra_lines}", in_reply_to_status_id=tweet.id)
+            
+
+            if len(generated_tweet_from_text_as_prefix[0])+len(username)+5 > 240:
+                self.api.update_status(f"Hey @{username}, {tweet_without_extra_lines[0:240-len(username)-5]}",
+                                         in_reply_to_status_id=tweet.id)
+            else:
+                self.api.update_status(f"Hey @{username}, {tweet_without_extra_lines}", in_reply_to_status_id=tweet.id)
 
         #if timer is 60 minutes :
             #generate a standalone tweet, post it
