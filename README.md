@@ -10,3 +10,4 @@ Trump tweets.
 * [Trump Twitter Archive](http://www.trumptwitterarchive.com/)
 * [How to Make a Twitter Bot in Python With Tweepy](https://realpython.com/twitter-bot-python-tweepy/)
 * [Tweepy](https://github.com/tweepy/tweepy)
+* [markovify](https://github.com/jsvine/markovify)
