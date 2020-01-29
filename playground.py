@@ -1,5 +1,6 @@
 import tweepy
 from StreamListener import MyStreamListener
+from StandaloneTweeter import StandaloneTweeter
 
 # Authenticate to Twitter
 auth = tweepy.OAuthHandler("SUdZqYq6bB0VignOg63Ze5QnK",
@@ -17,6 +18,11 @@ try:
 except:
     print("Error during authentication")
 
+# Setup @sarcastic_trump reply machine
 tweets_listener = MyStreamListener(api)
 stream = tweepy.Stream(api.auth, tweets_listener)
-stream.filter(track=["sarcastic_trump"], languages=["en"])
+stream.filter(track=["sarcastic_trump"], languages=["en"], is_async=True)
+
+# Setup @sarcastic_trump standalone tweet machine
+standalone_tweeter = StandaloneTweeter(api)
+standalone_tweeter.run_every(minutes=2)
