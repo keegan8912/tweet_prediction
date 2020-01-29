@@ -6,6 +6,7 @@ from datetime import datetime
 import tensorflow as tf
 import time
 import re
+import schedule
 
 class MyStreamListener(tweepy.StreamListener):
 
@@ -22,6 +23,7 @@ class MyStreamListener(tweepy.StreamListener):
         tf.reset_default_graph()
         self.sess = gpt2.start_tf_sess()
         gpt2.load_gpt2(self.sess, run_name='trump_clean_small')
+        
 
     def generate_gpt2_tweet_using_prefix(self, prefix = 'Your mum', run_name = 'trump_clean_small'):
         return gpt2.generate(self.sess, length=40, temperature=0.8, nsamples=1, run_name = run_name, prefix = prefix,
@@ -30,9 +32,8 @@ class MyStreamListener(tweepy.StreamListener):
 
     def generate_tweets_from_markov_models(self, markov_text_model):
         standalone_tweet = markov_text_model.make_short_sentence(240)
+        self.api.update_status(f"{standalone_tweet}")
         
-        return standalone_tweet
-
     def remove_extra_lines(self, text):
         list_of_suffix = [".", ",", "!", "?"]
         idx = []
@@ -69,7 +70,11 @@ class MyStreamListener(tweepy.StreamListener):
             else:
                 self.api.update_status(f"Hey @{username}, {tweet_without_extra_lines}", in_reply_to_status_id=tweet.id)
 
-        #if timer is 60 minutes :
+        else :
+            schedule.every().hour.do(generate_tweets_from_markov_models)
+            while True:
+                schedule.run_pending()
+                time.sleep(1)
             #generate a standalone tweet, post it
 
 
